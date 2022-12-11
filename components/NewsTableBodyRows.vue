@@ -22,8 +22,19 @@ export default class NewsTableBodyRows extends Vue {
 <style lang="scss" scoped>
 .table-body {
   &__link {
-    color: white;
+    color: black;
     text-decoration: none;
+  }
+
+  &__row {
+    color: black;
+    border-top: 1px solid black;
+  }
+
+  @media (max-width: 426px) {
+    &__row {
+      font-size: 12px;
+    }
   }
 
   &__link:hover {

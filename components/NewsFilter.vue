@@ -21,6 +21,7 @@
         v-model="menu"
         :close-on-content-click="false"
         :return-value.sync="date"
+        class="filter__data-wrapper"
         min-width="auto"
         offset-y
         transition="scale-transition"
@@ -28,6 +29,7 @@
         <template v-slot:activator="{ on, attrs }">
           <v-text-field
             v-model="date"
+            class="filter__data-input"
             label="Поиск по дате"
             readonly
             v-bind="attrs"
@@ -36,11 +38,13 @@
         </template>
         <v-date-picker
           v-model="date"
+          class="filter__data-picker"
           no-title
           scrollable
         >
           <v-spacer></v-spacer>
           <v-btn
+            class="filter__picker-btn"
             color="primary"
             text
             @click="menu = false"
@@ -48,6 +52,7 @@
             Отменить
           </v-btn>
           <v-btn
+            class="filter__picker-btn"
             color="primary"
             text
             @click="$refs.menu.save(date)"
@@ -70,7 +75,7 @@
       >Применить
       </v-btn>
       <v-btn
-        class="filter__apply"
+        class="filter__reset"
         elevation="2"
         outlined
         @click="resetPickerAndSearch"
@@ -91,17 +96,17 @@ export default class NewsFilter extends Vue {
   menu = false
   search = ''
 
-  emitPickerAndSearch () {
+  emitPickerAndSearch() {
     this.$emit('filter', {
       search: this.search,
       date: this.date
     });
   }
 
-  resetPickerAndSearch () {
+  resetPickerAndSearch() {
     this.date = ''
     this.search = ''
-    this.emitPickerAndSearch ()
+    this.emitPickerAndSearch()
   }
 }
 </script>

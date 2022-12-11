@@ -1,6 +1,6 @@
 <template>
   <v-app-bar class="header">
-    <v-toolbar-title class="header__logo">News Page</v-toolbar-title>
+    <v-toolbar-title class="header__logo">Новости</v-toolbar-title>
   </v-app-bar>
 </template>
 
@@ -19,12 +19,10 @@ export default class TheHeader extends Vue {
 .header {
   display: flex;
   justify-content: center;
-  background: white;
   max-height: 64px;
 
   &__logo {
-    color: white;
+    color: black;
   }
 }
-
 </style>

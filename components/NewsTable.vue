@@ -1,24 +1,41 @@
 <template>
   <div class="news-table" @click="getPaginatedValues">
-    <table v-if="paginatedNews.length">
-      <thead>
-      <tr>
-        <th v-if="isIncrease" @click="setIsIncrease">Дата ↓</th>
-        <th v-else @click="setIsIncrease">Дата ↑</th>
-        <th>Заголовок</th>
-        <th>Анонс</th>
+    <table v-if="paginatedNews.length" class="news-table__table table">
+      <thead class="table__head">
+      <tr class="table__rows">
+        <th
+          v-if="isIncrease"
+          class="table__row"
+          @click="setIsIncrease"
+        >Дата ↓
+        </th>
+        <th
+          v-else
+          class="table__row"
+          @click="setIsIncrease"
+        >Дата ↑
+        </th>
+        <th class="table__row">Заголовок</th>
+        <th class="table__row">Анонс</th>
       </tr>
       </thead>
-      <tbody>
-      <NewsTableBodyRows v-for="newsItem in paginatedNews" :key="newsItem.id" :news-item="newsItem"/>
+      <tbody class="table__body">
+      <NewsTableBodyRows
+        v-for="newsItem in paginatedNews"
+        :key="newsItem.id"
+        :news-item="newsItem"
+        class="table__rows"
+      />
       </tbody>
     </table>
-    <div v-else>
+    <div v-else class="news-table__message"
+    >
       Нет подходящих новостей
     </div>
     <v-pagination
       v-model="currentPage"
       :length="setSlidesQuantity"
+      class="news-table__pagination"
       next-icon="mdi-menu-right"
       prev-icon="mdi-menu-left"
     ></v-pagination>
@@ -62,11 +79,31 @@ export default class NewsTable extends Vue {
   display: flex;
   flex-direction: column;
   padding: 12px;
-  border: 1px solid white;
+  background-color: white;
+
+  &__table {
+    border: 1px solid black;
+  }
+
+  &__pagination {
+    margin: 20px 0;
+  }
 }
 
-tr > th:nth-child(1) {
-  width: 90px;
-  cursor: pointer;
+.table {
+  @media (max-width: 426px) {
+    &__row {
+      font-size: 14px;
+    }
+  }
+
+  &__row:nth-child(1) {
+    min-width: 90px;
+    cursor: pointer;
+  }
+
+  &__row:nth-child(1):hover {
+    opacity: 0.6;
+  }
 }
 </style>

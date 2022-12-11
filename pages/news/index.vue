@@ -1,7 +1,10 @@
 <template>
   <div class="news">
-    <NewsFilter @filter="getFilterValue"/>
+    <NewsFilter
+      class="news__filter"
+      @filter="getFilterValue"/>
     <NewsTable
+      class="news__table"
       :paginated-news="paginatedNews"
       :set-slides-quantity="setSlidesQuantity"
       @paginatedValues="getPaginatedValues"

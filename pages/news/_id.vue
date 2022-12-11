@@ -3,6 +3,7 @@
     <div class="news-item d-flex justify-center">
       <div class="news-item__content">
         <v-carousel :show-arrows="false" class="news-item__carousel">
+
           <v-carousel-item
             v-for="details in storeNewsItem"
             v-if="details.mediaType === 'image/jpeg'"
@@ -13,6 +14,7 @@
           ></v-carousel-item>
 
           <img v-else alt="default-img" class="news-item__default-img" src="@/assets/img/default-img.jpg">
+
         </v-carousel>
 
         <v-card
@@ -20,6 +22,7 @@
           :key="i"
           class="news-item__news-card news-card"
         >
+
           <v-card-subtitle class="news-card__subtitle pb-0">
             {{ details.date }}
           </v-card-subtitle>
@@ -36,6 +39,7 @@
             <a :href="details.link" class="news-card__link-item" target="_blank">Ссылка на источник</a>
             <NuxtLink class="news-card__link-item" to="/news">Вернуться к новостям</NuxtLink>
           </v-card-text>
+
         </v-card>
 
         <v-dialog
@@ -49,7 +53,6 @@
               :src="details.media"
               alt="popup-img"
               class="popup__img"
-              style="width: 50%; height: 60%"
             >
             <img
               v-else
@@ -63,9 +66,9 @@
             class="news-item__btn"
             color="dark"
             @click="dialog = false"
-          >
-            Закрыть
+          >Закрыть
           </v-btn>
+
         </v-dialog>
       </div>
     </div>
@@ -103,24 +106,73 @@ export default class _id extends Vue {
 
 <style lang="scss" scoped>
 .news-item {
+  padding: 60px 0;
+
   &__content {
-    width: 60%;
-    height: 60%;
+    max-width: 1150px;
+  }
+
+  @media (max-width: 1440px) {
+    &__content {
+      width: 60%;
+    }
+  }
+
+  @media (max-width: 600px) {
+    &__content {
+      width: 100%;
+      padding: 0 30px;
+    }
+  }
+
+  @media (max-width: 376px) {
+    &__content {
+      padding: 0 15px;
+    }
   }
 
   &__default-img {
     height: 100%;
   }
+
+  &__carousel-item {
+    cursor: pointer;
+  }
 }
 
-  .news-card {
-    &__links {
-      display: flex;
-      justify-content: space-between;
-    }
+.news-card {
+  &__links {
+    display: flex;
+    justify-content: space-between;
+  }
 
-    &__link-item {
-      color: white;
+  @media (max-width: 376px) {
+    &__links {
+      flex-direction: column;
+      align-items: center;
     }
   }
+
+  &__link-item {
+    color: black;
+  }
+
+  &__title {
+    word-break: normal;
+  }
+}
+
+.popup {
+  &__img {
+    width: 60%;
+    height: 60%;
+  }
+
+  @media (max-width: 600px) {
+    &__img {
+      width: 100%;
+      height: 60%;
+    }
+  }
+}
 </style>
