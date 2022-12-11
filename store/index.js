@@ -1,24 +1,22 @@
 export const state = () => ({
-  counter: 0
+  storeNews: []
 })
 
 export const getters = {
-  getCounter(state) {
-    return state.counter
+  getStoreNews(state) {
+    return state.storeNews
   }
 }
 
 export const mutations = {
-  increment(state) {
-    state.counter++
+  increment(state, news) {
+    state.storeNews = news
   }
 }
 
 export const actions = {
-  async fetchCounter({ state }) {
-    // make request
-    const res = { data: 10 };
-    state.counter = res.data;
-    return res.data;
+  increment(context, news) {
+    context.commit('increment', news)
   }
+
 }

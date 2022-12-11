@@ -1,6 +1,6 @@
 <template>
   <div @click="getPaginatedValues" class="news-table">
-    <table>
+    <table v-if="paginatedNews.length">
       <thead>
       <tr>
         <th>Дата</th>
@@ -12,9 +12,12 @@
       <NewsTableBodyRows v-for="newsItem in paginatedNews" :key="newsItem.id" :news-item="newsItem"/>
       </tbody>
     </table>
+    <div v-else>
+      Нет подходящих новостей
+    </div>
     <v-pagination
       v-model="currentPage"
-      :length="Math.ceil(10 / pageSize)"
+      :length="setSlidesQuantity"
       next-icon="mdi-menu-right"
       prev-icon="mdi-menu-left"
     ></v-pagination>
@@ -36,6 +39,8 @@ export default class NewsTable extends Vue {
   pageSize = 5
 
   @Prop({required: true}) paginatedNews
+  @Prop({required: true}) setSlidesQuantity
+
 
   getPaginatedValues() {
     this.$emit('paginatedValues', {
@@ -50,6 +55,8 @@ export default class NewsTable extends Vue {
 .news-table {
   display: flex;
   flex-direction: column;
+  padding: 12px;
+  border: 1px solid white;
 }
 
 tr > th:nth-child(1) {

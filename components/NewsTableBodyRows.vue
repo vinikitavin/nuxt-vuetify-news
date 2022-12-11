@@ -1,10 +1,10 @@
 <template>
-  <tr>
-    <td>{{ newsItem.date }}</td>
-    <td>
-      <NuxtLink :to="'/news/' + newsItem.id">{{ newsItem.title }}</NuxtLink>
+  <tr class="table-body">
+    <td class="table-body__row">{{ newsItem.date }}</td>
+    <td class="table-body__row">
+      <NuxtLink class="table-body__link" :to="'/news/' + newsItem.id">{{ newsItem.title }}</NuxtLink>
     </td>
-    <td>{{ newsItem.content }}</td>
+    <td class="table-body__row">{{ newsItem.content }}</td>
   </tr>
 </template>
 
@@ -20,11 +20,14 @@ export default class NewsTableBodyRows extends Vue {
 </script>
 
 <style lang="scss" scoped>
-tr > td:nth-child(2) {
-  cursor: pointer;
-}
+.table-body {
+  &__link {
+    color: white;
+    text-decoration: none;
+  }
 
-tr > td:nth-child(2):hover {
-  opacity: 0.6;
+  &__link:hover {
+    opacity: 0.6;
+  }
 }
 </style>

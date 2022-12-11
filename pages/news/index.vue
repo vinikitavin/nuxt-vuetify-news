@@ -1,17 +1,15 @@
 <template>
   <div class="news">
     <NewsFilter @filter="getFilterValue"/>
-    <NewsTable @paginatedValues="getPaginatedValues" :paginated-news="paginatedNews"/>
+    <NewsTable :paginated-news="paginatedNews" :set-slides-quantity="setSlidesQuantity"
+               @paginatedValues="getPaginatedValues"/>
   </div>
 </template>
 
 <script>
-import { Component, Vue } from 'vue-property-decorator';
+import {Component, Vue} from 'vue-property-decorator';
 import NewsFilter from '@/components/NewsFilter'
 import NewsTable from '@/components/NewsTable'
-// import { getModule } from 'vuex-module-decorators';
-// import getNews from '@/store/getNews';
-// import { store } from '@/store';
 import axios from "axios";
 
 @Component({
@@ -23,16 +21,36 @@ import axios from "axios";
   }
 })
 export default class NewsPage extends Vue {
-  filterValue = {}
+  filterValue = {
+    search: '',
+    date: ''
+  }
   paginatedValues = {
     currentPage: 1,
     pageSize: 5
   }
   news = []
-  // storeNews = getModule(getNews)
+  newsQuantity = 0
 
-  getPaginatedValues(paginatedValues) {
-    this.paginatedValues = paginatedValues
+  get paginatedNews() {
+    const start = (this.paginatedValues.currentPage * this.paginatedValues.pageSize) - this.paginatedValues.pageSize
+    const end = this.paginatedValues.currentPage * this.paginatedValues.pageSize
+    let paginatedNews = []
+
+    this.newsQuantity = this.news.filter(item =>
+      item.title
+        .toLowerCase()
+        .includes(this.filterValue.search
+          .trim()
+          .toLowerCase())
+      && item.date
+        .includes(this.filterValue.date
+          .trim()
+        )
+    )
+    paginatedNews = this.newsQuantity.slice(start, end)
+    this.$store.dispatch('increment', paginatedNews)
+    return paginatedNews
   }
 
   async getNews() {
@@ -44,39 +62,32 @@ export default class NewsPage extends Vue {
         return {
           id: index + 1,
           date: item.pubDate.slice(0, 10),
+          author: item.author,
+          link: item.link,
+          mediaType: item.enclosure.type,
+          media: item.enclosure.link,
           title: item.title,
           content: item.content
         };
       });
-      console.log(news, 'news')
-      console.log(this.$store.state.counter, 'storeNews')
-    } catch(error) {
+      this.news = news
+    } catch (error) {
       console.log(error)
     }
   }
 
-  get paginatedNews() {
-    const start = (this.paginatedValues.currentPage * this.paginatedValues.pageSize) - this.paginatedValues.pageSize
-    const end = this.paginatedValues.currentPage * this.paginatedValues.pageSize
-
-    if (this.filterValue.search && !this.filterValue.date) {
-      return this.news.filter(item => item.title.toLowerCase().includes(this.filterValue.search.trim().toLowerCase())).slice(start, end)
+  get setSlidesQuantity() {
+    if (this.newsQuantity.length <= this.paginatedValues.pageSize) {
+      return 1
     }
-    if (!this.filterValue.search && this.filterValue.date) {
-      return this.news.filter(item => item.date.includes(this.filterValue.date.trim())).slice(start, end)
-    }
-    if (this.filterValue.search && this.filterValue.date) {
-      return this.news.filter(item =>
-        item.title.toLowerCase().includes(this.filterValue.search.trim().toLowerCase())
-        &&
-        item.date.includes(this.filterValue.date.trim()))
-        .slice(start, end)
-    } else {
-      return this.news.slice(start, end)
-    }
+    return Math.ceil(this.newsQuantity.length / this.paginatedValues.pageSize)
   }
 
-  getFilterValue (filterValue) {
+  getPaginatedValues(paginatedValues) {
+    this.paginatedValues = paginatedValues
+  }
+
+  getFilterValue(filterValue) {
     this.filterValue = filterValue
   }
 

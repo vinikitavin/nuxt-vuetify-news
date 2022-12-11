@@ -107,5 +107,6 @@ export default class NewsFilter extends Vue {
 .filter {
   display: flex;
   align-items: center;
+  //border: 1px solid white;
 }
 </style>
