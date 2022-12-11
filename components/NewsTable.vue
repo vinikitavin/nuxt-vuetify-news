@@ -1,9 +1,10 @@
 <template>
-  <div @click="getPaginatedValues" class="news-table">
+  <div class="news-table" @click="getPaginatedValues">
     <table v-if="paginatedNews.length">
       <thead>
       <tr>
-        <th>Дата</th>
+        <th v-if="isIncrease" @click="setIsIncrease">Дата ↓</th>
+        <th v-else @click="setIsIncrease">Дата ↑</th>
         <th>Заголовок</th>
         <th>Анонс</th>
       </tr>
@@ -25,7 +26,7 @@
 </template>
 
 <script>
-import {Component, Vue, Prop} from 'vue-property-decorator'
+import {Component, Prop, Vue} from 'vue-property-decorator'
 import NewsTableBodyRows from '@/components/NewsTableBodyRows'
 
 @Component({
@@ -37,10 +38,15 @@ import NewsTableBodyRows from '@/components/NewsTableBodyRows'
 export default class NewsTable extends Vue {
   currentPage = 1
   pageSize = 5
+  isIncrease = true
 
   @Prop({required: true}) paginatedNews
   @Prop({required: true}) setSlidesQuantity
 
+  setIsIncrease() {
+    this.isIncrease = !this.isIncrease;
+    this.$emit('isIncrease', this.isIncrease)
+  }
 
   getPaginatedValues() {
     this.$emit('paginatedValues', {
@@ -61,5 +67,6 @@ export default class NewsTable extends Vue {
 
 tr > th:nth-child(1) {
   width: 90px;
+  cursor: pointer;
 }
 </style>

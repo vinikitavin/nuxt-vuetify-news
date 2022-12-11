@@ -5,7 +5,11 @@
       md="4"
       sm="6"
     >
-      <v-text-field v-model="search" class="filter__search" label="Поиск по заголовку"></v-text-field>
+      <v-text-field
+        v-model="search"
+        class="filter__search"
+        label="Поиск по заголовку"
+      ></v-text-field>
     </v-col>
     <v-col
       cols="12"
@@ -25,7 +29,6 @@
           <v-text-field
             v-model="date"
             label="Поиск по дате"
-
             readonly
             v-bind="attrs"
             v-on="on"
@@ -42,14 +45,14 @@
             text
             @click="menu = false"
           >
-            Cancel
+            Отменить
           </v-btn>
           <v-btn
             color="primary"
             text
             @click="$refs.menu.save(date)"
           >
-            OK
+            Принять
           </v-btn>
         </v-date-picker>
       </v-menu>
@@ -107,6 +110,12 @@ export default class NewsFilter extends Vue {
 .filter {
   display: flex;
   align-items: center;
-  //border: 1px solid white;
+}
+
+@media (max-width: 960px) {
+  .filter {
+    flex-flow: column;
+    align-items: start;
+  }
 }
 </style>

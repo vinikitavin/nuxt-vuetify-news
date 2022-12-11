@@ -1,8 +1,12 @@
 <template>
   <div class="news">
     <NewsFilter @filter="getFilterValue"/>
-    <NewsTable :paginated-news="paginatedNews" :set-slides-quantity="setSlidesQuantity"
-               @paginatedValues="getPaginatedValues"/>
+    <NewsTable
+      :paginated-news="paginatedNews"
+      :set-slides-quantity="setSlidesQuantity"
+      @paginatedValues="getPaginatedValues"
+      @isIncrease="getIsIncrease"
+    />
   </div>
 </template>
 
@@ -30,14 +34,23 @@ export default class NewsPage extends Vue {
     pageSize: 5
   }
   news = []
-  newsQuantity = 0
+  fullNewsArray = 0
+  isIncrease = true
 
   get paginatedNews() {
     const start = (this.paginatedValues.currentPage * this.paginatedValues.pageSize) - this.paginatedValues.pageSize
     const end = this.paginatedValues.currentPage * this.paginatedValues.pageSize
-    let paginatedNews = []
+    let sortedNews = []
 
-    this.newsQuantity = this.news.filter(item =>
+    const getSortedNews = (newsArray) => {
+      if (this.isIncrease) {
+        return newsArray.sort((a, b) => a.id - b.id)
+      } else {
+        return newsArray.sort((a, b) => b.id - a.id)
+      }
+    }
+
+    this.fullNewsArray = this.news.filter(item =>
       item.title
         .toLowerCase()
         .includes(this.filterValue.search
@@ -48,9 +61,10 @@ export default class NewsPage extends Vue {
           .trim()
         )
     )
-    paginatedNews = this.newsQuantity.slice(start, end)
-    this.$store.dispatch('increment', paginatedNews)
-    return paginatedNews
+
+    sortedNews = getSortedNews(this.fullNewsArray).slice(start, end)
+    this.$store.dispatch('increment', sortedNews)
+    return sortedNews
   }
 
   async getNews() {
@@ -77,10 +91,14 @@ export default class NewsPage extends Vue {
   }
 
   get setSlidesQuantity() {
-    if (this.newsQuantity.length <= this.paginatedValues.pageSize) {
+    if (this.fullNewsArray.length <= this.paginatedValues.pageSize) {
       return 1
     }
-    return Math.ceil(this.newsQuantity.length / this.paginatedValues.pageSize)
+    return Math.ceil(this.fullNewsArray.length / this.paginatedValues.pageSize)
+  }
+
+  getIsIncrease(isIncrease) {
+    this.isIncrease = isIncrease
   }
 
   getPaginatedValues(paginatedValues) {
