@@ -66,7 +66,8 @@ export default class NewsPage extends Vue {
     )
 
     sortedNews = getSortedNews(this.fullNewsArray).slice(start, end)
-    this.$store.dispatch('increment', sortedNews)
+    this.$store.dispatch('changeStoreNews', sortedNews)
+    console.log(this.$store.state.storeNews, 'storeNews')
     return sortedNews
   }
 

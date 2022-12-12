@@ -9,14 +9,14 @@ export const getters = {
 }
 
 export const mutations = {
-  increment(state, news) {
+  setStoreNews(state, news) {
     state.storeNews = news
   }
 }
 
 export const actions = {
-  increment(context, news) {
-    context.commit('increment', news)
+  changeStoreNews({ commit }, news) {
+    commit('setStoreNews', news)
   }
 
 }
